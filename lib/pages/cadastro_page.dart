@@ -1,6 +1,10 @@
 
 import 'package:flutter/material.dart';
 import 'package:trabalhodisp/services/loginService.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+
+final _firestore = FirebaseFirestore.instance;
 
 class CadastroPage extends StatefulWidget {
   const CadastroPage({super.key});
@@ -20,6 +24,7 @@ class _CadastroPageState extends State<CadastroPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        automaticallyImplyLeading: false,
         centerTitle: true,
         title: const Text('Cadastro'),
       ),
@@ -115,15 +120,25 @@ class _CadastroPageState extends State<CadastroPage> {
 
                   // Botão cadastrar
                   ElevatedButton(
-                    onPressed: () {
+                    onPressed: () async {
                       if (formKey.currentState!.validate()) {
                         print('Cadastro validado!');
                         print(nomeController.text);
                         print(emailController.text);
 
-                        LoginService().criarUsuario(nomeController.text, emailController.text, senhaController.text);
-
-                      }
+                        try {
+                          LoginService.criarUsuario(emailController.text, senhaController.text);
+                          String idUsuario = FirebaseAuth.instance.currentUser!.uid;
+                          await _firestore.collection('usuarios').doc(emailController.text).set({
+                            'id': idUsuario,
+                            'nome': nomeController.text,
+                            'email': emailController.text,
+                          });
+                          print('Usuário criado com sucesso!');
+                        } catch (e) {
+                          print('Erro ao criar usuário: $e');
+                        }
+                      } 
 
                   
 

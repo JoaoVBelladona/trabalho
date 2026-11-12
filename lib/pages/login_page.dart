@@ -81,7 +81,7 @@ class LoginPage extends StatelessWidget {
                               ElevatedButton(
                                 onPressed: () async {
                                   try{
-                                    await LoginService().loginUsuario(emailController.text, passwordController.text);
+                                   await LoginService.loginUsuario(emailController.text, passwordController.text);
                                   } catch (e) {
                                     switch (e) {
                                       case 'invalid-email':

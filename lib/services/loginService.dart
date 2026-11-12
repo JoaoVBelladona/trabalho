@@ -1,16 +1,19 @@
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+
+final FirebaseFirestore _firestore = FirebaseFirestore.instance;
 
 class LoginService {
 
-         criarUsuario(String nome, String email, String senha) {
-        return FirebaseAuth.instance.createUserWithEmailAndPassword(email: email, password: senha);
+        static criarUsuario(String email, String senha) async {
+        return FirebaseAuth.instance.createUserWithEmailAndPassword(email: email, password: senha);  
     }
 
-        loginUsuario(String email, String senha) async {
+        static loginUsuario(String email, String senha) async {
         return FirebaseAuth.instance.signInWithEmailAndPassword(email: email, password: senha);
     }
 
-    Future<void> sairUsuario() async {
+        static sairUsuario() async {
         return FirebaseAuth.instance.signOut();
     }
 

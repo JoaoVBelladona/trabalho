@@ -1,6 +1,7 @@
 import 'package:firebase_core/firebase_core.dart' show FirebaseOptions;
 import 'package:flutter/foundation.dart'
     show defaultTargetPlatform, kIsWeb, TargetPlatform;
+import 'package:trabalhodisp/firebase_keys.dart';
 
 class DefaultFirebaseOptions {
   static FirebaseOptions get currentPlatform {
@@ -41,11 +42,11 @@ class DefaultFirebaseOptions {
   }
 
   static const FirebaseOptions web = FirebaseOptions(
-    apiKey: 'AIzaSyDsUr8zizC9mFyDg4h6_hf7MMeD7pncXV8',
-    appId: '1:195215718321:web:d2d53ca91b4d409f716f90',
-    messagingSenderId: '195215718321',
-    projectId: 'trabalhodispositivos-98681',
-    authDomain: 'trabalhodispositivos-98681.firebaseapp.com',
-    storageBucket: 'trabalhodispositivos-98681.firebasestorage.app',
+    apiKey: firebaseWebApiKey,
+    appId: firebaseWebAppId,
+    messagingSenderId: firebaseMessagingSenderId,
+    projectId: firebaseProjectId,
+    authDomain: firebaseAuthDomain,
+    storageBucket: firebaseStorageBucket,
   );
 }
