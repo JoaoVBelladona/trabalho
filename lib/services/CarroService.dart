@@ -1,17 +1,18 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:trabalhodisp/model/Carro.dart';
 
-class ContatoService {
+class CarroService {
 
 
 
 
-  static Future<void> salvaCarro(String modelo, String ano, String placa, String nomeDono, String servico, String pronto) async {
+  static Future<void> salvaCarro(Carro carro) async {
         await FirebaseFirestore.instance.collection('Servicos').add({
-        'modelo': modelo,
-        'ano': ano,
-        'placa': placa,
-        'nomeDono': nomeDono,
-        'servico': servico,
-        'pronto': pronto = 'Não',
+        'modelo': carro.modelo,
+        'ano': carro.ano,
+        'placa': carro.placa,
+        'nomeDono': carro.nomeDono,
+        'servico': carro.servico,
+        'pronto': carro.pronto,
       }); }
 }

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:trabalhodisp/model/Carro.dart';
+import 'package:trabalhodisp/services/CarroService.dart';
 
 class PrincipalPage extends StatefulWidget {
   const PrincipalPage({super.key});
@@ -28,7 +29,6 @@ class _PrincipalPageState extends State<PrincipalPage> {
   
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Text('Bem-vindo ao Serviço de Oficina!'),
             SizedBox(height: 16),
             Text('Aqui você pode gerenciar seus serviços e clientes.'),
           ],
@@ -94,10 +94,14 @@ class _PrincipalPageState extends State<PrincipalPage> {
                         servico: servicoController.text, 
                         pronto: 'Não',
                       );
-                      carros.add(carro);
-                      Navigator.of(context).pop();
+                      try {
+                        CarroService.salvaCarro(carro);
+                        print('Carro salvo com sucesso!');
+                      } catch (e) {
+                        print('Erro ao salvar o carro: $e');
+                      }
                     },
-                    
+
                     child: const Text('Salvar'),
                   ),
                 ],
