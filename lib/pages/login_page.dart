@@ -1,6 +1,8 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:trabalhodisp/firebase_options.dart';
 import 'package:trabalhodisp/pages/cadastro_page.dart';
+import 'package:trabalhodisp/pages/principal_page.dart';
 import 'package:trabalhodisp/services/loginService.dart';
 import 'package:firebase_core/firebase_core.dart';
 
@@ -19,8 +21,48 @@ void main() async {
 final emailController = TextEditingController();
 final passwordController = TextEditingController();
 
-class LoginPage extends StatelessWidget {
+class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
+
+  @override
+  State<LoginPage> createState() => _LoginPageState();
+}
+
+class _LoginPageState extends State<LoginPage> {
+
+  showMensagem(String msg, {bool error = true} ){
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+         content: Text(msg), 
+         backgroundColor: error ?  Colors.red : Colors.green
+         )
+     );
+  }
+
+  entrar() async {
+    try{
+      await LoginService.loginUsuario(emailController.text, passwordController.text);
+      showMensagem('Login realizado com sucesso', error: false);
+      print('Login realizado com sucesso');
+    } on FirebaseAuthException catch (e) {
+      switch (e.code) {
+        case 'invalid-email':
+          showMensagem('Email invalido');
+          break;
+        case 'user-not-found':
+          showMensagem('Usuario não encontrado');
+          break;
+        case 'wrong-password':
+          showMensagem('Senha incorreta');
+          break;
+        default:
+          print('Email: ${emailController.text}');
+          print('Senha: ${passwordController.text}');
+          print('Erro desconhecido: ${e.message}');
+          showMensagem(e.message ?? 'Erro desconhecido');
+      }
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -77,20 +119,21 @@ class LoginPage extends StatelessWidget {
                                   ),
                                 ],
                               ),
+
                               const SizedBox(height: 70.0),
+
                               ElevatedButton(
                                 onPressed: () async {
                                   try{
-                                   await LoginService.loginUsuario(emailController.text, passwordController.text);
-                                  } catch (e) {
-                                    switch (e) {
-                                      case 'invalid-email':
-                                        print('Email invalido');
-                                        break;
-                                    }
+                                    await entrar();
+                                    Navigator.of(context).pushReplacement(
+                                      MaterialPageRoute(builder: (context) => const PrincipalPage())
+                                    );
+                                  } on FirebaseAuthException catch (e) {
+                                    showMensagem('Erro ao realizar login: ${e.message}');
                                   }
                                 },
-                                child: const Text('Entrar'),
+                                child: const Text('Entrar') 
                               ),
                             ],
                           )),

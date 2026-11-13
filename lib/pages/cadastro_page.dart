@@ -18,6 +18,41 @@ class _CadastroPageState extends State<CadastroPage> {
   final emailController = TextEditingController();
   final senhaController = TextEditingController();
 
+    showMensagem(String msg, {bool error = true} ){
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+         content: Text(msg), 
+         backgroundColor: error ?  Colors.red : Colors.green
+         )
+     );
+  }
+
+   cadastrarUsuarrio() async{
+    try{
+      await LoginService.criarUsuario(emailController.text, senhaController.text);
+      showMensagem('Usuário cadastrado com sucesso!', error: false);
+      Navigator.pop(context);
+    } on FirebaseAuthException catch (e) {
+      switch (e.code) {
+        case 'invalid-email':
+          showMensagem('Email invalido');
+          break;
+        case 'email-already-in-use':
+          showMensagem('Email já está em uso');
+          break;
+        case 'weak-password':
+          showMensagem('Senha fraca, use pelo menos 6 caracteres');
+          break;
+        default:
+          showMensagem('Erro desconhecido');
+      }
+    }
+  }
+
+
+
+
+
   final formKey = GlobalKey<FormState>();
 
   @override
@@ -127,7 +162,7 @@ class _CadastroPageState extends State<CadastroPage> {
                         print(emailController.text);
 
                         try {
-                          LoginService.criarUsuario(emailController.text, senhaController.text);
+                          await cadastrarUsuarrio();
                           String idUsuario = FirebaseAuth.instance.currentUser!.uid;
                           await _firestore.collection('usuarios').doc(emailController.text).set({
                             'id': idUsuario,
