@@ -1,11 +1,13 @@
+
 class Carro {
-  String? id;
-  String modelo;
-  String ano;
-  String placa;
-  String nomeDono;
-  String servico;
-  String pronto;
+  final String? id;
+  final String modelo;
+  final String ano;
+  final String placa;
+  final String nomeDono;
+  final String servico;
+  final String pronto;
+
 
   Carro({
     this.id,
@@ -15,29 +17,18 @@ class Carro {
     required this.nomeDono,
     required this.servico,
     required this.pronto,
-  });
 
-  Map<String, dynamic> toMap() {
-    return {
-      'id': id,
-      'modelo': modelo,
-      'ano': ano,
-      'placa': placa,
-      'nomeDono': nomeDono,
-      'servico': servico,
-      'pronto': pronto,
-    };
-  }
+  });
 
   factory Carro.fromMap(Map<String, dynamic> map) {
     return Carro(
-      id: map['id'],
-      modelo: map['modelo'],
-      ano: map['ano'],
-      placa: map['placa'],
-      nomeDono: map['nomeDono'],
-      servico: map['servico'],
-      pronto: map['pronto'],
+      id: map['id']?.toString(),
+      modelo: map['modelo']?.toString() ?? '',
+      ano: map['ano']?.toString() ?? '',
+      placa: map['placa']?.toString() ?? '',
+      nomeDono: map['nomeDono']?.toString() ?? '',
+      servico: map['servico']?.toString() ?? '',
+      pronto: map['pronto']?.toString() ?? 'Não',
     );
   }
 }
